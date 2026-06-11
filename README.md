@@ -5,9 +5,13 @@ in a day wins a huge prize. While you solve a puzzle the screen **truly locks** 
 window goes into kiosk/fullscreen mode, OS shortcuts (Alt+Tab, Alt+F4, Win, Ctrl+W/Q/R…)
 are swallowed, and the window can't be closed until you solve it or forfeit.
 
+The entire UI — markup, styles, and logic — is bundled into a single self-contained
+**`index.html`**. Open that one file in a browser to play instantly, or run it as the
+Electron desktop app (below) for the real OS-level screen lock.
+
 ## How it works
 
-- Enter your name to join.
+- Sign up or log in.
 - Hit **Lock In & Solve a Puzzle** — the screen goes fullscreen and locks. Page-leaving
   shortcuts (Esc, Ctrl/Cmd+W/T/N/R/L) and tab-close are blocked while a puzzle is active.
 - Puzzles are randomly generated: mental math, number sequences, anagrams, and riddles.
@@ -22,9 +26,9 @@ npm install
 npm start
 ```
 
-This launches the Electron app. The same UI also runs as a plain web page (open
-`index.html` in a browser) — there it falls back to a Fullscreen-API lock instead of
-the real OS-level kiosk lock.
+This launches the Electron app, which loads the single-file `index.html`. The same file
+also runs as a plain web page (just open `index.html`) — there it falls back to a
+Fullscreen-API lock instead of the real OS-level kiosk lock.
 
 ## How the lock works
 

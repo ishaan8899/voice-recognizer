@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "lint:js": "node -c app.js && node -c main.js && node -c preload.js"
+    "lint:js": "node -c main.js && node -c preload.js"
   },
   "author": "",
   "license": "MIT",
