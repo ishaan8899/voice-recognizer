@@ -35,6 +35,15 @@ the real OS-level kiosk lock.
   intercepted by any app — that's intentional at the OS level.)
 - **Browser fallback:** Fullscreen API plus keyboard/`beforeunload` guards.
 
+## Accounts
+
+- **Sign up** with a username (2–20 chars) and password (min 4 chars), or **log in** to
+  an existing account. Usernames are case-insensitive.
+- Passwords are never stored in plaintext: each account gets a random 16-byte salt and
+  the password is hashed with **PBKDF2-SHA256 (100k iterations)** via the Web Crypto API.
+- Accounts live in this machine's `localStorage` (no server), and your session persists
+  across restarts until you log out.
+
 ## Notes
 
 - State is stored per-machine in `localStorage`, scoped by calendar day, so players on

@@ -22,6 +22,52 @@ const saveDay = (s) => localStorage.setItem("pr-scores-" + todayKey(), JSON.stri
 
 let player = localStorage.getItem("pr-player") || "";
 
+/* ---------- accounts (local, salted + hashed passwords) ---------- */
+const loadUsers = () => JSON.parse(localStorage.getItem("pr-users") || "{}");
+const saveUsers = (u) => localStorage.setItem("pr-users", JSON.stringify(u));
+
+function randomSalt() {
+  const bytes = new Uint8Array(16);
+  crypto.getRandomValues(bytes);
+  return Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("");
+}
+
+async function hashPassword(password, salt) {
+  if (crypto.subtle) {
+    const enc = new TextEncoder();
+    const key = await crypto.subtle.importKey("raw", enc.encode(password), "PBKDF2", false, ["deriveBits"]);
+    const bits = await crypto.subtle.deriveBits(
+      { name: "PBKDF2", salt: enc.encode(salt), iterations: 100000, hash: "SHA-256" },
+      key, 256
+    );
+    return Array.from(new Uint8Array(bits), (b) => b.toString(16).padStart(2, "0")).join("");
+  }
+  // Insecure-context fallback (e.g. http:// LAN) — better than plaintext, not crypto-grade.
+  let h = 0x811c9dc5;
+  const s = salt + password + salt;
+  for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; }
+  return "fnv-" + h.toString(16);
+}
+
+async function signUp(name, password) {
+  const users = loadUsers();
+  const key = name.toLowerCase();
+  if (users[key]) throw new Error("That username is taken — log in instead.");
+  if (password.length < 4) throw new Error("Password must be at least 4 characters.");
+  const salt = randomSalt();
+  users[key] = { name, salt, hash: await hashPassword(password, salt), createdAt: Date.now() };
+  saveUsers(users);
+  return users[key].name;
+}
+
+async function logIn(name, password) {
+  const users = loadUsers();
+  const u = users[name.toLowerCase()];
+  if (!u) throw new Error("No account with that username — sign up first.");
+  if ((await hashPassword(password, u.salt)) !== u.hash) throw new Error("Wrong password — try again.");
+  return u.name;
+}
+
 /* ---------- helpers ---------- */
 const randInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 const choice = (arr) => arr[Math.floor(Math.random() * arr.length)];
@@ -204,21 +250,51 @@ function renderLobby() {
 }
 
 /* ---------- events ---------- */
-$("signin-form").addEventListener("submit", (e) => {
+let authMode = "login";
+function setAuthMode(mode) {
+  authMode = mode;
+  $("tab-login").classList.toggle("active", mode === "login");
+  $("tab-signup").classList.toggle("active", mode === "signup");
+  $("password-confirm").classList.toggle("hidden", mode === "login");
+  $("password-input").autocomplete = mode === "login" ? "current-password" : "new-password";
+  $("auth-submit").textContent = mode === "login" ? "Log in →" : "Create account →";
+  $("auth-error").textContent = "";
+}
+$("tab-login").addEventListener("click", () => setAuthMode("login"));
+$("tab-signup").addEventListener("click", () => setAuthMode("signup"));
+
+$("auth-form").addEventListener("submit", async (e) => {
   e.preventDefault();
   const name = $("name-input").value.trim();
-  if (!name) return;
-  player = name;
-  localStorage.setItem("pr-player", player);
-  prizeClaimed = false;
-  show("lobby");
-  renderLobby();
+  const password = $("password-input").value;
+  $("auth-error").textContent = "";
+  if (!name || !password) return;
+  try {
+    if (authMode === "signup") {
+      if (!/^[\w .-]{2,20}$/.test(name)) throw new Error("Username: 2–20 letters, numbers, spaces, . _ -");
+      if (password !== $("password-confirm").value) throw new Error("Passwords don't match.");
+      player = await signUp(name, password);
+    } else {
+      player = await logIn(name, password);
+    }
+    localStorage.setItem("pr-player", player);
+    prizeClaimed = false;
+    $("password-input").value = "";
+    $("password-confirm").value = "";
+    show("lobby");
+    renderLobby();
+  } catch (err) {
+    $("auth-error").textContent = err.message;
+  }
 });
 
 $("logout-btn").addEventListener("click", () => {
   localStorage.removeItem("pr-player");
   player = "";
   $("name-input").value = "";
+  $("password-input").value = "";
+  $("password-confirm").value = "";
+  setAuthMode("login");
   show("signin");
 });
 
@@ -256,5 +332,7 @@ $("winner-close").addEventListener("click", () => $("winner-banner").classList.a
 /* ---------- boot ---------- */
 $("prize-name").textContent = PRIZE;
 $("prize-name-2").textContent = PRIZE;
-if (player) { show("lobby"); renderLobby(); }
-else show("signin");
+setAuthMode("login");
+// Restore the session only if the remembered player still has an account.
+if (player && loadUsers()[player.toLowerCase()]) { show("lobby"); renderLobby(); }
+else { player = ""; show("signin"); }

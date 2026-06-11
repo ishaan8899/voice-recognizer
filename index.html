@@ -12,16 +12,26 @@
 <body>
   <div class="aurora"><span></span><span></span><span></span></div>
 
-  <!-- ============ SIGN IN ============ -->
+  <!-- ============ AUTH (LOG IN / SIGN UP) ============ -->
   <section id="signin" class="screen active">
     <div class="card glass signin-card">
       <div class="logo">🧩</div>
       <h1>Puzzle&nbsp;Royale</h1>
       <p class="tagline">Solve the most puzzles today and win the <strong>Grand Prize</strong> 🏆</p>
-      <form id="signin-form">
-        <input id="name-input" type="text" placeholder="Enter your name" maxlength="20" autocomplete="off" required />
-        <button type="submit" class="btn primary">Start Playing →</button>
+
+      <div class="auth-tabs">
+        <button id="tab-login" class="auth-tab active" type="button">Log in</button>
+        <button id="tab-signup" class="auth-tab" type="button">Sign up</button>
+      </div>
+
+      <form id="auth-form" autocomplete="off">
+        <input id="name-input" type="text" placeholder="Username" maxlength="20" autocomplete="username" required />
+        <input id="password-input" type="password" placeholder="Password" maxlength="64" autocomplete="current-password" required />
+        <input id="password-confirm" type="password" placeholder="Confirm password" maxlength="64" class="hidden" />
+        <p id="auth-error" class="auth-error"></p>
+        <button type="submit" id="auth-submit" class="btn primary">Log in →</button>
       </form>
+
       <div class="prize-chip">
         <span class="prize-chip-emoji">🎁</span>
         <span>Today's prize: <strong id="prize-name">a brand-new gaming laptop 💻</strong></span>
@@ -39,7 +49,7 @@
           <p class="muted" id="today-date"></p>
         </div>
       </div>
-      <button id="logout-btn" class="btn ghost">Switch player</button>
+      <button id="logout-btn" class="btn ghost">Log out</button>
     </header>
 
     <div class="grid">

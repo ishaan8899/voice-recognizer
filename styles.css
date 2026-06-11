@@ -72,15 +72,29 @@ h1 { font-size: 2.6rem; font-weight: 800; letter-spacing: -0.02em; margin: 6px 0
 .prize-chip strong { color: #ffe39a; }
 .prize-chip-emoji { font-size: 1.1rem; }
 
+/* ---------- auth tabs ---------- */
+.auth-tabs {
+  display: flex; gap: 6px; background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--stroke); border-radius: 14px; padding: 5px; margin-bottom: 18px;
+}
+.auth-tab {
+  flex: 1; padding: 11px; border: none; border-radius: 10px; cursor: pointer;
+  background: transparent; color: var(--muted); font-family: inherit;
+  font-size: 0.95rem; font-weight: 700; transition: background 0.15s, color 0.15s;
+}
+.auth-tab.active { background: linear-gradient(120deg, var(--accent2), var(--accent)); color: #0b0e20; }
+.auth-error { min-height: 20px; color: var(--danger); font-size: 0.88rem; font-weight: 600; margin: -2px 0 10px; }
+
 /* ---------- inputs & buttons ---------- */
-input[type="text"] {
+input[type="text"],
+input[type="password"] {
   width: 100%; padding: 15px 16px; border-radius: 14px;
   border: 1px solid var(--stroke); background: rgba(255, 255, 255, 0.05);
   color: var(--text); font-size: 1rem; font-family: inherit; margin-bottom: 12px;
   transition: border-color 0.15s, box-shadow 0.15s;
 }
-input[type="text"]::placeholder { color: #7a80ac; }
-input[type="text"]:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 4px rgba(124, 108, 255, 0.18); }
+input[type="text"]::placeholder, input[type="password"]::placeholder { color: #7a80ac; }
+input[type="text"]:focus, input[type="password"]:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 4px rgba(124, 108, 255, 0.18); }
 
 .btn {
   cursor: pointer; border: none; border-radius: 14px; padding: 14px 20px;
