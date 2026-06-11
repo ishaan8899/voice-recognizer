@@ -58,7 +58,10 @@ function makePuzzle() {
     case "anagram": {
       const words = ["puzzle", "winner", "prize", "locked", "genius", "victory", "champion", "riddle"];
       const w = choice(words);
-      const scrambled = w.split("").sort(() => Math.random() - 0.5).join("");
+      let scrambled = w;
+      while (scrambled === w) {
+        scrambled = w.split("").sort(() => Math.random() - 0.5).join("");
+      }
       return {
         kind: "Unscramble the word",
         question: scrambled.toUpperCase(),
