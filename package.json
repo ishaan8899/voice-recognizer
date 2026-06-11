@@ -1,0 +1,15 @@
+{
+  "name": "puzzle-royale",
+  "version": "1.0.0",
+  "description": "Daily puzzle competition desktop app — solve the most puzzles to win the prize. The screen truly locks (kiosk mode) while you solve.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "lint:js": "node -c app.js && node -c main.js && node -c preload.js"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^31.0.0"
+  }
+}

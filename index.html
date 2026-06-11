@@ -3,71 +3,97 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Puzzle Royale — Solve the Most, Win the Prize</title>
+  <title>Puzzle Royale</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <div class="aurora"><span></span><span></span><span></span></div>
+
   <!-- ============ SIGN IN ============ -->
   <section id="signin" class="screen active">
-    <div class="card">
-      <h1>🧩 Puzzle Royale</h1>
-      <p class="tagline">Solve the most puzzles today and win the <strong>HUGE PRIZE</strong> 🏆</p>
+    <div class="card glass signin-card">
+      <div class="logo">🧩</div>
+      <h1>Puzzle&nbsp;Royale</h1>
+      <p class="tagline">Solve the most puzzles today and win the <strong>Grand Prize</strong> 🏆</p>
       <form id="signin-form">
         <input id="name-input" type="text" placeholder="Enter your name" maxlength="20" autocomplete="off" required />
-        <button type="submit" class="btn primary">Start Playing</button>
+        <button type="submit" class="btn primary">Start Playing →</button>
       </form>
-      <p class="prize-note">Today's prize: <span id="prize-name">a brand-new gaming laptop 💻</span></p>
+      <div class="prize-chip">
+        <span class="prize-chip-emoji">🎁</span>
+        <span>Today's prize: <strong id="prize-name">a brand-new gaming laptop 💻</strong></span>
+      </div>
     </div>
   </section>
 
   <!-- ============ LOBBY ============ -->
   <section id="lobby" class="screen">
-    <header class="topbar">
-      <div>
-        <h2>Welcome, <span id="player-name"></span>!</h2>
-        <p class="muted">Today: <span id="today-date"></span></p>
+    <header class="topbar glass">
+      <div class="topbar-id">
+        <div id="player-avatar" class="avatar lg">?</div>
+        <div>
+          <h2>Hey, <span id="player-name"></span></h2>
+          <p class="muted" id="today-date"></p>
+        </div>
       </div>
       <button id="logout-btn" class="btn ghost">Switch player</button>
     </header>
 
     <div class="grid">
-      <div class="card stat">
+      <div class="card glass stat">
         <span class="stat-num" id="my-solved">0</span>
-        <span class="stat-label">Puzzles you solved today</span>
+        <span class="stat-label">Solved today</span>
       </div>
-      <div class="card stat">
+      <div class="card glass stat">
         <span class="stat-num" id="my-rank">—</span>
         <span class="stat-label">Your rank</span>
       </div>
-      <div class="card prize-card">
+      <div class="card glass prize-card">
         <span class="prize-emoji">🏆</span>
-        <span class="stat-label">Daily Grand Prize</span>
-        <strong id="prize-name-2">a brand-new gaming laptop 💻</strong>
+        <div>
+          <span class="stat-label">Grand Prize</span>
+          <strong id="prize-name-2">a brand-new gaming laptop 💻</strong>
+        </div>
       </div>
     </div>
 
-    <button id="start-puzzle-btn" class="btn primary big">🔒 Lock In &amp; Solve a Puzzle</button>
-    <p class="muted center">The screen locks while you solve. No peeking, no escaping — solve it or forfeit.</p>
+    <div class="card glass progress-card">
+      <div class="progress-head">
+        <span>Progress to today's prize</span>
+        <span id="progress-label" class="muted">0 / 5</span>
+      </div>
+      <div class="progress-track"><div id="progress-fill" class="progress-fill"></div></div>
+      <p class="muted small" id="progress-hint">Be the day's top solver and reach 5 puzzles to win.</p>
+    </div>
 
-    <div class="card">
-      <h3>🥇 Today's Leaderboard</h3>
+    <button id="start-puzzle-btn" class="btn primary big glow">
+      <span class="lock-emoji">🔒</span> Lock In &amp; Solve a Puzzle
+    </button>
+    <p class="muted center small">The screen locks while you solve. Solve it or forfeit — no escaping.</p>
+
+    <div class="card glass">
+      <h3 class="section-title">🥇 Today's Leaderboard</h3>
       <ol id="leaderboard" class="leaderboard"></ol>
     </div>
   </section>
 
   <!-- ============ LOCKED PUZZLE ============ -->
   <section id="puzzle" class="screen lock">
+    <div class="lock-grid"></div>
     <div class="lock-bar">
-      <span class="lock-icon">🔒</span>
-      <span>SCREEN LOCKED — Puzzle in progress</span>
+      <span class="lock-pulse">🔒</span>
+      <span class="lock-text">SCREEN LOCKED · PUZZLE IN PROGRESS</span>
       <span id="puzzle-timer" class="timer">0:00</span>
     </div>
 
     <div class="puzzle-body">
-      <p class="puzzle-kind" id="puzzle-kind"></p>
+      <span class="puzzle-kind" id="puzzle-kind"></span>
       <h2 id="puzzle-question"></h2>
-      <form id="answer-form">
-        <input id="answer-input" type="text" placeholder="Your answer" autocomplete="off" />
+      <form id="answer-form" autocomplete="off">
+        <input id="answer-input" type="text" placeholder="Type your answer…" autocomplete="off" />
         <button type="submit" class="btn primary">Submit</button>
       </form>
       <p id="puzzle-feedback" class="feedback"></p>
@@ -77,10 +103,11 @@
 
   <!-- ============ WINNER BANNER ============ -->
   <div id="winner-banner" class="winner-banner hidden">
-    <div class="winner-inner">
-      <span class="confetti">🎉</span>
+    <div id="confetti" class="confetti-layer"></div>
+    <div class="winner-inner glass">
+      <span class="trophy">🏆</span>
       <h2 id="winner-text"></h2>
-      <button id="winner-close" class="btn primary">Awesome!</button>
+      <button id="winner-close" class="btn primary">Claim it! 🎉</button>
     </div>
   </div>
 
