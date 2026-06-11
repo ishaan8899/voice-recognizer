@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Puzzle Royale — Solve the Most, Win the Prize</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- ============ SIGN IN ============ -->
+  <section id="signin" class="screen active">
+    <div class="card">
+      <h1>🧩 Puzzle Royale</h1>
+      <p class="tagline">Solve the most puzzles today and win the <strong>HUGE PRIZE</strong> 🏆</p>
+      <form id="signin-form">
+        <input id="name-input" type="text" placeholder="Enter your name" maxlength="20" autocomplete="off" required />
+        <button type="submit" class="btn primary">Start Playing</button>
+      </form>
+      <p class="prize-note">Today's prize: <span id="prize-name">a brand-new gaming laptop 💻</span></p>
+    </div>
+  </section>
+
+  <!-- ============ LOBBY ============ -->
+  <section id="lobby" class="screen">
+    <header class="topbar">
+      <div>
+        <h2>Welcome, <span id="player-name"></span>!</h2>
+        <p class="muted">Today: <span id="today-date"></span></p>
+      </div>
+      <button id="logout-btn" class="btn ghost">Switch player</button>
+    </header>
+
+    <div class="grid">
+      <div class="card stat">
+        <span class="stat-num" id="my-solved">0</span>
+        <span class="stat-label">Puzzles you solved today</span>
+      </div>
+      <div class="card stat">
+        <span class="stat-num" id="my-rank">—</span>
+        <span class="stat-label">Your rank</span>
+      </div>
+      <div class="card prize-card">
+        <span class="prize-emoji">🏆</span>
+        <span class="stat-label">Daily Grand Prize</span>
+        <strong id="prize-name-2">a brand-new gaming laptop 💻</strong>
+      </div>
+    </div>
+
+    <button id="start-puzzle-btn" class="btn primary big">🔒 Lock In &amp; Solve a Puzzle</button>
+    <p class="muted center">The screen locks while you solve. No peeking, no escaping — solve it or forfeit.</p>
+
+    <div class="card">
+      <h3>🥇 Today's Leaderboard</h3>
+      <ol id="leaderboard" class="leaderboard"></ol>
+    </div>
+  </section>
+
+  <!-- ============ LOCKED PUZZLE ============ -->
+  <section id="puzzle" class="screen lock">
+    <div class="lock-bar">
+      <span class="lock-icon">🔒</span>
+      <span>SCREEN LOCKED — Puzzle in progress</span>
+      <span id="puzzle-timer" class="timer">0:00</span>
+    </div>
+
+    <div class="puzzle-body">
+      <p class="puzzle-kind" id="puzzle-kind"></p>
+      <h2 id="puzzle-question"></h2>
+      <form id="answer-form">
+        <input id="answer-input" type="text" placeholder="Your answer" autocomplete="off" />
+        <button type="submit" class="btn primary">Submit</button>
+      </form>
+      <p id="puzzle-feedback" class="feedback"></p>
+      <button id="forfeit-btn" class="btn danger ghost">Forfeit &amp; unlock</button>
+    </div>
+  </section>
+
+  <!-- ============ WINNER BANNER ============ -->
+  <div id="winner-banner" class="winner-banner hidden">
+    <div class="winner-inner">
+      <span class="confetti">🎉</span>
+      <h2 id="winner-text"></h2>
+      <button id="winner-close" class="btn primary">Awesome!</button>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
